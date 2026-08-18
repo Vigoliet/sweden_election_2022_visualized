@@ -88,7 +88,6 @@ export const VotingMap: React.FC<VotingMapProps> = ({ geoJsonData }) => {
       const props = e.features[0].properties || {};
       
       const name = props.district_name || 'Valdistrikt';
-      const winner = props.winning_party || 'N/A';
       
       let votes: Record<string, any> = {};
       try {
@@ -106,18 +105,21 @@ export const VotingMap: React.FC<VotingMapProps> = ({ geoJsonData }) => {
         <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; margin-top:5px;">
           <span style="display:flex; align-items:center; gap:6px;">
             <span style="width:8px; height:8px; background:${PARTY_CONFIG[p.party]?.color || DEFAULT_COLOR}; border-radius:50%; display:inline-block;"></span>
-            <strong>${p.party}</strong>
+            <strong style="color: #1e293b;">${p.party}</strong>
           </span>
-          <span>${p.share.toFixed(1)}% (${p.count.toLocaleString('sv-SE')})</span>
+          <span style="color: #475569;">${p.share.toFixed(1)}% <span style="color: #94a3b8; font-size: 10px;">(${p.count.toLocaleString('sv-SE')})</span></span>
         </div>`).join('');
 
       new maptilersdk.Popup({ maxWidth: '320px' })
         .setLngLat(e.lngLat)
         .setHTML(`
-          <div style="font-family: system-ui, sans-serif; min-width: 220px; padding: 5px;">
-            <h3 style="margin: 0 0 5px 0; font-size: 14px; color: #0f172a;">${name}</h3>
-            <div style="display:flex; height:10px; border-radius:4px; overflow:hidden; background:#e2e8f0;">${stackedBarHtml}</div>
-            <div style="margin-top:8px;">${partyListHtml}</div>
+          <div style="font-family: system-ui, sans-serif; min-width: 240px; padding: 4px;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; padding-right: 24px;">
+              <h3 style="margin: 0; font-size: 14px; color: #0f172a; font-weight: 700;">${name}</h3>
+              <span style="font-size: 11px; color: #64748b; font-weight: 500; white-space: nowrap;">${totalVotes.toLocaleString('sv-SE')} röster</span>
+            </div>
+            <div style="display:flex; height:8px; border-radius:4px; overflow:hidden; background:#e2e8f0; margin-bottom: 8px;">${stackedBarHtml}</div>
+            <div>${partyListHtml}</div>
           </div>`)
         .addTo(map.current!);
     });
@@ -138,7 +140,7 @@ export const VotingMap: React.FC<VotingMapProps> = ({ geoJsonData }) => {
   return (
     <div style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', background: isDarkMode ? '#0f172a' : '#ffffff' }}>
       
-      {/* Global CSS för att göra stängningsknappen (X) i popupsen tydlig */}
+      {/* Global CSS för synlig stängningsknapp och spinner */}
       <style>{`
         .maplibregl-popup-close-button {
           font-size: 18px !important;
@@ -188,7 +190,7 @@ export const VotingMap: React.FC<VotingMapProps> = ({ geoJsonData }) => {
           fontFamily: 'system-ui, sans-serif'
         }}
       >
-        {isDarkMode ? '☀️ Light mode' : '🌙 dark mode'}
+        {isDarkMode ? '☀️ Ljust läge' : '🌙 Mörkt läge'}
       </button>
     </div>
   );
