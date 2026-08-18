@@ -17,6 +17,12 @@ const PARTY_CONFIG: Record<string, { name: string; color: string }> = {
 
 const DEFAULT_COLOR = '#94a3b8';
 
+// Expanded bounds so users can pan comfortably inside Sweden without hitting hard walls instantly
+const SWEDEN_BOUNDS: [[number, number], [number, number]] = [
+  [53.5, 5.0],   // South-West 
+  [71.5, 30.0]   // North-East 
+];
+
 export default function ElectionMap() {
   const [geoJsonData, setGeoJsonData] = useState<FeatureCollection | null>(null);
 
@@ -28,8 +34,15 @@ export default function ElectionMap() {
   }, []);
 
   return (
-    <div style={{ height: '100vh', width: '100vw' }}>
-      <MapContainer center={[62.0, 15.0]} zoom={5} style={{ height: '100%', width: '100%' }}>
+    <div style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', margin: 0, padding: 0, overflow: 'hidden' }}>
+      <MapContainer 
+        center={[62.0, 15.0]} 
+        zoom={5} 
+        minZoom={4}
+        maxBounds={SWEDEN_BOUNDS}
+        maxBoundsViscosity={0.75}
+        style={{ width: '100%', height: '100%' }}
+      >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
