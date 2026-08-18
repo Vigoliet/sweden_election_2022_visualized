@@ -190,7 +190,7 @@ export const VotingMap: React.FC<VotingMapProps> = ({ geoJsonData }) => {
           fontFamily: 'system-ui, sans-serif'
         }}
       >
-        {isDarkMode ? '☀️ Ljust läge' : '🌙 Mörkt läge'}
+        {isDarkMode ? '☀️ Light mode' : '🌙 Dark mode'}
       </button>
     </div>
   );
